@@ -1,21 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	fmt.Println("hello world")
 
-	// arraySign([]int{2, 1})                    // 1
-	// arraySign([]int{-2, 1})                   // -1
-	// arraySign([]int{-1, -2, -3, -4, 3, 2, 1}) // 1
+	fmt.Println(arraySign([]int{2, 1}))                    // 1
+	fmt.Println(arraySign([]int{-2, 1}))                   // -1
+	fmt.Println(arraySign([]int{-1, -2, -3, -4, 3, 2, 1})) // 1
 
-	// isAnagram("anak", "kana") // true
-	// isAnagram("anak", "mana") // false
-	// isAnagram("anagram", "managra") // true
+	fmt.Println(isAnagram("anak", "kana"))       // true
+	fmt.Println(isAnagram("anak", "mana"))       // false
+	fmt.Println(isAnagram("anagram", "managra")) // true
 
-	// findTheDifference("abcd", "abcde") // 'e'
-	// findTheDifference("abcd", "abced") // 'e'
-	// findTheDifference("", "y")         // 'y'
+	fmt.Println(findTheDifference("abcd", "abcde")) // 'e'
+	fmt.Println(findTheDifference("abcd", "abced")) // 'e'
+	fmt.Println(findTheDifference("", "y"))         // 'y'
 
 	// canMakeArithmeticProgression([]int{1, 5, 3})    // true; 1, 3, 5 adalah baris aritmatik +2
 	// canMakeArithmeticProgression([]int{5, 1, 9})    // true; 9, 5, 1 adalah baris aritmatik -4
@@ -27,15 +29,39 @@ func main() {
 // https://leetcode.com/problems/sign-of-the-product-of-an-array
 func arraySign(nums []int) int {
 	// write code here
-
-	return 1 // if positive
+	product := 1
+	for _, value := range nums {
+		if value == 0 {
+			return 0
+		}
+		product *= value
+	}
+	if product > 0 {
+		return 1
+	}
+	return -1 // if positive
 	// return -1 // if negative
 }
 
 // https://leetcode.com/problems/valid-anagram
 func isAnagram(s string, t string) bool {
-	// write code here
-	return false
+	if len(s) != len(t) {
+		return false
+	}
+
+	count := make(map[rune]int)
+
+	for i := 0; i < len(s); i++ {
+		count[rune(s[i])]++
+		count[rune(t[i])]--
+	}
+
+	for _, v := range count {
+		if v != 0 {
+			return false
+		}
+	}
+	return true
 }
 
 // https://leetcode.com/problems/find-the-difference
