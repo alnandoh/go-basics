@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sort"
+	"time"
 )
 
 func main() {
@@ -108,35 +110,53 @@ type Card struct {
 // [A Spade, 2 Spade,  ..., A Heart, 2 Heart, ..., J Diamond, Q Diamond, K Diamond ]
 // assume Ace-Spade on top of deck.
 func (d *Deck) New() {
-	// write code here
+	d.cards = []Card{}
+	for symbol := 0; symbol < 4; symbol++ {
+		for number := 1; number <= 13; number++ {
+			d.cards = append(d.cards, Card{symbol, number})
+		}
+	}
 }
 
 // PeekTop return n cards from the top
 func (d Deck) PeekTop(n int) []Card {
-	// write code here
-	return nil
+	if n > len(d.cards) {
+		n = len(d.cards)
+	}
+	return d.cards[:n]
 }
 
 // PeekTop return n cards from the bottom
 func (d Deck) PeekBottom(n int) []Card {
-	// write code here
-	return nil
+	if n > len(d.cards) {
+		n = len(d.cards)
+	}
+	return d.cards[len(d.cards)-n:]
 }
 
 // PeekCardAtIndex return a card at specified index
 func (d Deck) PeekCardAtIndex(idx int) Card {
+	if idx < 0 || idx >= len(d.cards) {
+		return Card{} // or handle out-of-range index as needed
+	}
 	return d.cards[idx]
 }
 
 // Shuffle randomly shuffle the deck
 func (d *Deck) Shuffle() {
-	// write code here
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(d.cards), func(i, j int) {
+		d.cards[i], d.cards[j] = d.cards[j], d.cards[i]
+	})
 }
 
 // Cut perform single "Cut" technique. Move n top cards to bottom
 // e.g. Deck: [1, 2, 3, 4, 5]. Cut(3) resulting Deck: [4, 5, 1, 2, 3]
 func (d *Deck) Cut(n int) {
-	// write code here
+	if n > len(d.cards) {
+		n = len(d.cards)
+	}
+	d.cards = append(d.cards[n:], d.cards[:n]...)
 }
 
 func (c Card) ToString() string {
