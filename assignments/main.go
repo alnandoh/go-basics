@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 func main() {
@@ -15,15 +16,15 @@ func main() {
 	fmt.Println(isAnagram("anak", "mana"))       // false
 	fmt.Println(isAnagram("anagram", "managra")) // true
 
-	fmt.Println(findTheDifference("abcd", "abcde")) // 'e'
-	fmt.Println(findTheDifference("abcd", "abced")) // 'e'
-	fmt.Println(findTheDifference("", "y"))         // 'y'
+	fmt.Printf("%c\n", findTheDifference("abcd", "abcde")) // 'e'
+	fmt.Printf("%c\n", findTheDifference("abcd", "abced")) // 'e'
+	fmt.Printf("%c\n", findTheDifference("", "y"))         // 'y'
 
-	// canMakeArithmeticProgression([]int{1, 5, 3})    // true; 1, 3, 5 adalah baris aritmatik +2
-	// canMakeArithmeticProgression([]int{5, 1, 9})    // true; 9, 5, 1 adalah baris aritmatik -4
-	// canMakeArithmeticProgression([]int{1, 2, 4, 8}) // false; 1, 2, 4, 8 bukan baris aritmatik, melainkan geometrik x2
+	fmt.Println(canMakeArithmeticProgression([]int{1, 5, 3}))    // true; 1, 3, 5 adalah baris aritmatik +2
+	fmt.Println(canMakeArithmeticProgression([]int{5, 1, 9}))    // true; 9, 5, 1 adalah baris aritmatik -4
+	fmt.Println(canMakeArithmeticProgression([]int{1, 2, 4, 8})) // false; 1, 2, 4, 8 bukan baris aritmatik, melainkan geometrik x2
 
-	// tesDeck()
+	tesDeck()
 }
 
 // https://leetcode.com/problems/sign-of-the-product-of-an-array
@@ -49,14 +50,14 @@ func isAnagram(s string, t string) bool {
 		return false
 	}
 
-	count := make(map[rune]int)
+	anagramMap := make(map[rune]int)
 
 	for i := 0; i < len(s); i++ {
-		count[rune(s[i])]++
-		count[rune(t[i])]--
+		anagramMap[rune(s[i])]++
+		anagramMap[rune(t[i])]--
 	}
 
-	for _, v := range count {
+	for _, v := range anagramMap {
 		if v != 0 {
 			return false
 		}
@@ -66,15 +67,30 @@ func isAnagram(s string, t string) bool {
 
 // https://leetcode.com/problems/find-the-difference
 func findTheDifference(s string, t string) byte {
-	// write code here
-	b := byte('a')
-	return b
+	var result byte
+
+	for i := 0; i < len(s); i++ {
+		result ^= s[i]
+	}
+	for i := 0; i < len(t); i++ {
+		result ^= t[i]
+	}
+
+	return result
 }
 
 // https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence
 func canMakeArithmeticProgression(arr []int) bool {
-	// write code here
-	return false
+	sort.Ints(arr)
+	d := arr[1] - arr[0]
+
+	for i := 2; i < len(arr); i++ {
+		if arr[i]-arr[i-1] != d {
+			return false
+		}
+	}
+
+	return true
 }
 
 // Deck represent "standard" deck consist of 52 cards
